@@ -50,7 +50,7 @@ const validateStatusTransition = (currentStatus, targetStatus) => {
   if (currentStatus === "Closed") {
     throw ApiError.badRequest("Cannot move status out of Closed stage");
   }
-  if (targetStatus === "Closed") return; 
+  if (targetStatus === "Closed") return;
 
   const PIPELINE = ["Applied", "Screening", "Interview", "Offer", "Closed"];
   const currentIndex = PIPELINE.indexOf(currentStatus);
@@ -63,11 +63,16 @@ const validateStatusTransition = (currentStatus, targetStatus) => {
   }
 };
 
-
-
 // GET All Application
 export const getAllApplications = async (user, query = {}) => {
-  const { page = 1, limit = 10, status, search, sort = "applied_date", order = "desc" } = query;
+  const {
+    page = 1,
+    limit = 10,
+    status,
+    search,
+    sort = "applied_date",
+    order = "desc",
+  } = query;
 
   const allowedSorts = ["applied_date", "created_at", "company", "status"];
   const sortColumn = allowedSorts.includes(sort) ? sort : "applied_date";
@@ -162,7 +167,10 @@ export const updateApplication = async (applicationId, user, data) => {
   for (const [jsKey, dbColumn] of Object.entries(fieldMap)) {
     if (data[jsKey] !== undefined) {
       let value = data[jsKey];
-      if ((jsKey === "nextFollowUpDate" || jsKey === "salaryExpectation") && value === "") {
+      if (
+        (jsKey === "nextFollowUpDate" || jsKey === "salaryExpectation") &&
+        value === ""
+      ) {
         value = null;
       }
       fields.push(`${dbColumn} = $${paramIndex++}`);
@@ -190,7 +198,7 @@ export const updateApplication = async (applicationId, user, data) => {
   return rows[0];
 };
 
-// Update Application Status 
+// Update Application Status
 export const updateApplicationStatus = async (applicationId, user, status) => {
   const application = await findAndAuthorize(applicationId, user);
   validateStatusTransition(application.status, status);
