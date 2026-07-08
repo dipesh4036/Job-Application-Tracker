@@ -99,11 +99,11 @@ npm run dev                 # Starts on http://localhost:5173
 
 ### Auth Routes
 
-| Method | Endpoint             | Description              | Auth |
-| ------ | -------------------- | ------------------------ | ---- |
-| `POST` | `/api/auth/register` | Register new user        | ❌   |
-| `POST` | `/api/auth/login`    | Login & receive JWT      | ❌   |
-| `GET`  | `/api/auth/me`       | Get current user profile | ✅   |
+| Method | Endpoint             | Description             |
+| ------ | -------------------- | ------------------------|
+| `POST` | `/api/auth/register` | Register new user       |
+| `POST` | `/api/auth/login`    | Login & receive JWT     |
+| `GET`  | `/api/auth/me`       | Get current user profile|
 
 ### Application Routes (all protected)
 
@@ -152,15 +152,14 @@ Job-Application-Tracker/
 
 | #   | Decision                          | Explanation                                                                                                                                                                        |
 | --- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **PostgreSQL instead of MongoDB** | The spec says "You can use Any Database." PostgreSQL was chosen for relational integrity. Stats use `GROUP BY` — the SQL equivalent of MongoDB's `$match` → `$group` → `$project`. |
-| 2   | **`id` instead of `_id`**         | PostgreSQL uses UUID `id` columns — the equivalent of MongoDB's `_id`.                                                                                                             |
-| 3   | **Extra `PATCH /status` route**   | Added for the required "inline status update from the list view" (spec section 4.3).                                                                                               |
-| 4   | **Flat stats response**           | Returns `{total, Applied, Screening, ...responseRate}` instead of `[{status, count}]` — easier for the frontend StatsPanel.                                                        |
-| 5   | **`asyncHandler` wrapper**        | Wraps all async controllers instead of inline try/catch. Achieves the same "no unhandled rejections" goal with cleaner code.                                                       |
-| 6   | **409 for duplicate email**       | Returns HTTP 409 Conflict instead of 400 — more semantically correct in REST.                                                                                                      |
-| 7   | **camelCase in / snake_case out** | Requests use camelCase (`appliedDate`), responses return snake_case (`applied_date`) matching PostgreSQL columns. Frontend handles both.                                           |
-| 8   | **Forward-only pipeline**         | Status moves one step forward only. "Closed" is reachable from any stage (rejections/withdrawals) but is terminal.                                                                 |
-| 9   | **Rate limiting on auth routes**  | Configured `express-rate-limit` on `/register` and `/login` (max 20 requests per 15 minutes) to protect against brute-force attacks.                                               |
+| 1   | **PostgreSQL instead of MongoDB** | PostgreSQL was chosen for relational integrity.|
+| 2   | **Extra `PATCH /status` route**   | Added for the required "inline status update from the list view" .                                                                                               |
+| 3   | **Flat stats response**           | Returns `{total, Applied, Screening, ...responseRate}` instead of `[{status, count}]` — easier for the frontend StatsPanel.                                                        |
+| 4   | **`asyncHandler` wrapper**        | Wraps all async controllers instead of inline try/catch. Achieves the same "no unhandled rejections" goal with cleaner code.                                                       |
+| 5   | **409 for duplicate email**       | Returns HTTP 409 Conflict instead of 400 — more semantically correct in REST.                                                                                                      |
+| 6   | **camelCase in / snake_case out** | Requests use camelCase (`appliedDate`), responses return snake_case (`applied_date`) matching PostgreSQL columns. Frontend handles both.                                           |
+| 7   | **Forward-only pipeline**         | Status moves one step forward only. "Closed" is reachable from any stage (rejections/withdrawals) but is terminal.                                                                 |
+| 8   | **Rate limiting on auth routes**  | Configured `express-rate-limit` on `/register` and `/login` (max 20 requests per 15 minutes) to protect against brute-force attacks.                                               |
 
 ---
 
