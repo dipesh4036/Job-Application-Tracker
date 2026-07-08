@@ -174,6 +174,18 @@ We implemented several extra enhancements for security, user experience, and vis
 
 ---
 
+---
+
+## 🌐 Deployment
+
+- **Frontend**: Hosted on [Vercel](https://vercel.com)
+- **Backend**: Hosted on [Render](https://render.com)
+
+> [!IMPORTANT]
+> The backend server is hosted on Render's free tier. As a result, the server will automatically spin down (sleep) after a period of inactivity. Please allow **50+ seconds** for the Render server to spin up and start responding on your first request or initial login.
+
+----
+
 ## 🧪 Testing the API
 
 ### 📬 Postman Collection Documentation
